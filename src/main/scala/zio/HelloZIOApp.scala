@@ -1,6 +1,6 @@
 package zio
 
-import scalaz.zio.console._
+import scalaz.zio.console.{Console, getStrLn, putStrLn}
 import scalaz.zio.{App, ZIO}
 
 object HelloZIOApp extends App {
