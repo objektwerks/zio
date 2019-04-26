@@ -3,7 +3,7 @@ package zio
 import scalaz.zio.console.{Console, getStrLn, putStrLn}
 import scalaz.zio.{App, ZIO}
 
-object HelloZIOApp extends App {
+object ZioApp extends App {
   val error = 1
   val success = 0
 
