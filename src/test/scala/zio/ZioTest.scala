@@ -1,16 +1,13 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.ZIO
+import scalaz.zio.{DefaultRuntime, ZIO}
 
 class ZioTest extends FunSuite with Matchers {
-  test("effect success") {
-    val success = ZIO.succeed(33)
-    success.run
-  }
+  test("effects") {
+    val runtime = new DefaultRuntime {}
 
-  test("effect fail") {
-    val fail = ZIO.fail(new IllegalArgumentException("illegal arg"))
-    fail.run
+    runtime.unsafeRun( ZIO.succeed(33) ) shouldBe 33
+    runtime.unsafeRun( ZIO.succeedLazy( List(1, 2, 3).sum ) ) shouldBe 6
   }
 }
