@@ -8,9 +8,10 @@ import scala.io.{Codec, Source}
 import scala.util.Try
 
 class ZioTest extends FunSuite with Matchers {
-  test("effects") {
-    val runtime = new DefaultRuntime {}
+  val utf8 = Codec.UTF8.name
+  val runtime = new DefaultRuntime {}
 
+  test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
     runtime.unsafeRun( ZIO.succeed(33) ) shouldBe 33
     runtime.unsafeRun( ZIO.succeedLazy( List(1, 2, 3).sum ) ) shouldBe 6
@@ -19,6 +20,12 @@ class ZioTest extends FunSuite with Matchers {
     runtime.unsafeRun( ZIO.fromTry(Try(18 / 3)) ) shouldBe 6
     runtime.unsafeRun( ZIO.fromFunction((i: Int) => i * i).provide(3) ) shouldBe 9
     runtime.unsafeRun( ZIO.fromFuture { implicit ec => Future(3).map(_ * 3) } ) shouldBe 9
-    runtime.unsafeRun( ZIO.effect( Source.fromFile("build.sbt", Codec.UTF8.name) ) ).mkString.nonEmpty shouldBe true
+    runtime.unsafeRun( ZIO.effect( Source.fromFile("build.sbt", utf8) ) ).mkString.nonEmpty shouldBe true
+  }
+
+  test("errors") {
+    val fallback = ZIO.effect( Source.fromFile("build.sat", utf8) ) orElse ZIO.effect( Source.fromFile("build.sbt", utf8) )
+    runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
+
   }
 }
