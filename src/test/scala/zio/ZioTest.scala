@@ -46,5 +46,13 @@ class ZioTest extends FunSuite with Matchers {
       source <- fiber.join
     } yield source.mkString
     runtime.unsafeRun( fileContents ).nonEmpty shouldBe true
+
+    val helloWorld = for {
+      helloFiber <- ZIO.succeed("Hello, ").fork
+      worldFiber <- ZIO.succeed("world!").fork
+      fiber = helloFiber zip worldFiber
+      tuple  <- fiber.join
+    } yield tuple._1 + tuple._2
+    runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
   }
 }
