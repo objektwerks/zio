@@ -41,11 +41,11 @@ class ZioTest extends FunSuite with Matchers {
 
   test("fibers") {
     val fileEffect = ZIO.effect( Source.fromFile("build.sbt", utf8) )
-    val fileContents = for {
+    val fileContent = for {
       fiber <- fileEffect.fork
       source <- fiber.join
     } yield source.mkString
-    runtime.unsafeRun( fileContents ).nonEmpty shouldBe true
+    runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
 
     val helloWorld = for {
       helloFiber <- ZIO.succeed("Hello, ").fork
@@ -54,5 +54,17 @@ class ZioTest extends FunSuite with Matchers {
       tuple <- fiber.join
     } yield tuple._1 + tuple._2
     runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
+  }
+
+  test("bracket") { // TODO!
+    val open = ZIO.fromFunction( (file: String) => Source.fromFile(file, utf8) )
+    val close = ZIO.fromFunction( (source: BufferedSource) => source.close )
+    val fileContent = for {
+      fiber <- open.provide("build.sbt").fork
+      source <- fiber.join
+      content = source.mkString
+      _ <- close.provide(source)
+    } yield content
+    runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
   }
 }
