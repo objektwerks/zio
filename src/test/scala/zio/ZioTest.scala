@@ -1,10 +1,10 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, ZIO}
+import scalaz.zio.{DefaultRuntime, Task, ZIO}
 
 import scala.concurrent.Future
-import scala.io.{Codec, Source}
+import scala.io.{BufferedSource, Codec, Source}
 import scala.util.Try
 
 class ZioTest extends FunSuite with Matchers {
@@ -27,6 +27,10 @@ class ZioTest extends FunSuite with Matchers {
     val invalidFileEffect = ZIO.effect( Source.fromFile("build.sat", utf8) )
     val validFileEffect = ZIO.effect( Source.fromFile("build.sbt", utf8) )
     val fallback = invalidFileEffect orElse validFileEffect
+    val fold: Task[BufferedSource] = invalidFileEffect.foldM(_ => validFileEffect, source => ZIO.succeed(source))
+    val catchall: Task[BufferedSource] = invalidFileEffect.catchAll(_ => validFileEffect)
     runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
+    runtime.unsafeRun( fold ).mkString.nonEmpty shouldBe true
+    runtime.unsafeRun( catchall ).mkString.nonEmpty shouldBe true
   }
 }
