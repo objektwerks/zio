@@ -40,6 +40,11 @@ class ZioTest extends FunSuite with Matchers {
   }
 
   test("fibers") {
-
+    val fileEffect = ZIO.effect( Source.fromFile("build.sbt", utf8) )
+    val fileContents = for {
+      fiber <- fileEffect.fork
+      source <- fiber.join
+    } yield source.mkString
+    runtime.unsafeRun( fileContents ).nonEmpty shouldBe true
   }
 }
