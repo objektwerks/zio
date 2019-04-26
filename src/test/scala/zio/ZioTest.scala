@@ -26,6 +26,5 @@ class ZioTest extends FunSuite with Matchers {
   test("errors") {
     val fallback = ZIO.effect( Source.fromFile("build.sat", utf8) ) orElse ZIO.effect( Source.fromFile("build.sbt", utf8) )
     runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
-
   }
 }
