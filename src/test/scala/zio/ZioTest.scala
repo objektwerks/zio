@@ -8,13 +8,12 @@ import scala.io.{BufferedSource, Codec, Source}
 import scala.util.Try
 
 class ZioTest extends FunSuite with Matchers {
-  val utf8 = Codec.UTF8.name
   val runtime = new DefaultRuntime {}
 
   def open(file: String): Task[String] = ZIO.effect {
     var source: BufferedSource = null
     try {
-      source = Source.fromFile(file, utf8)
+      source = Source.fromFile(file, Codec.UTF8.name)
       source.mkString
     } finally { source.close }
   }
