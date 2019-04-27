@@ -30,20 +30,21 @@ class ZioTest extends FunSuite with Matchers {
 
   test("errors") {
     val fallback = open("build.sat") orElse open("build.sbt")
-    val fold: Task[BufferedSource] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
-    val catchall: Task[BufferedSource] = open("build.sat").catchAll(_ => open("build.sbt"))
-    val retryOrElse = open("build.sat").retryOrElse( Schedule.once, (_: Throwable,_: Unit) => open("build.sbt"))
-
     runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
+
+    val fold: Task[BufferedSource] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
     runtime.unsafeRun( fold ).mkString.nonEmpty shouldBe true
+
+    val catchall: Task[BufferedSource] = open("build.sat").catchAll(_ => open("build.sbt"))
     runtime.unsafeRun( catchall ).mkString.nonEmpty shouldBe true
+
+    val retryOrElse = open("build.sat").retryOrElse( Schedule.once, (_: Throwable,_: Unit) => open("build.sbt"))
     runtime.unsafeRun( retryOrElse ).mkString.nonEmpty shouldBe true
   }
 
   test("fibers") {
-    val fileEffect = ZIO.effect( Source.fromFile("build.sbt", utf8) )
     val fileContent = for {
-      fiber <- fileEffect.fork
+      fiber <- open("build.sbt").fork
       source <- fiber.join
     } yield source.mkString
     runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
