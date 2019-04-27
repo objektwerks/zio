@@ -11,9 +11,13 @@ class ZioTest extends FunSuite with Matchers {
   val utf8 = Codec.UTF8.name
   val runtime = new DefaultRuntime {}
 
-  def open(file: String): Task[BufferedSource] = ZIO.effect(Source.fromFile(file, utf8))
-
-  def close(source: BufferedSource): Task[Unit] = ZIO.effect { try { source.close() } finally { () } }
+  def open(file: String): Task[String] = ZIO.effect {
+    var source: BufferedSource = null
+    try {
+      source = Source.fromFile(file, utf8)
+      source.mkString
+    } finally { source.close }
+  }
 
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
@@ -30,12 +34,12 @@ class ZioTest extends FunSuite with Matchers {
 
   test("errors") {
     val fallback = open("build.sat") orElse open("build.sbt")
-    runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
+    runtime.unsafeRun( fallback ).nonEmpty shouldBe true
 
-    val fold: Task[BufferedSource] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
-    runtime.unsafeRun( fold ).mkString.nonEmpty shouldBe true
+    val fold: Task[String] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
+    runtime.unsafeRun( fold ).nonEmpty shouldBe true
 
-    val catchall: Task[BufferedSource] = open("build.sat").catchAll(_ => open("build.sbt"))
+    val catchall: Task[String] = open("build.sat").catchAll(_ => open("build.sbt"))
     runtime.unsafeRun( catchall ).mkString.nonEmpty shouldBe true
 
     val retryOrElse = open("build.sat").retryOrElse( Schedule.once, (_: Throwable,_: Unit) => open("build.sbt"))
@@ -57,10 +61,4 @@ class ZioTest extends FunSuite with Matchers {
     } yield tuple._1 + tuple._2
     runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
   }
-
-/* TODO! Fix bracket type mismatch error!
-  test("bracket") {
-    val fileContent: Task[String] = open("build.sbt").bracket(close(_)) { source => ZIO.effect(source.mkString) }
-    runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
-  } */
 }
