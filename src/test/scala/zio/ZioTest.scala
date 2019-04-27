@@ -11,6 +11,10 @@ class ZioTest extends FunSuite with Matchers {
   val utf8 = Codec.UTF8.name
   val runtime = new DefaultRuntime {}
 
+  def open(file: String): Task[BufferedSource] = ZIO.effect(Source.fromFile(file, utf8))
+
+  def close(source: BufferedSource): Task[Unit] = ZIO.effect(source.close)
+
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
 
@@ -25,13 +29,10 @@ class ZioTest extends FunSuite with Matchers {
   }
 
   test("errors") {
-    val invalidFileEffect = ZIO.effect( Source.fromFile("build.sat", utf8) )
-    val validFileEffect = ZIO.effect( Source.fromFile("build.sbt", utf8) )
-
-    val fallback = invalidFileEffect orElse validFileEffect
-    val fold: Task[BufferedSource] = invalidFileEffect.foldM(_ => validFileEffect, source => ZIO.succeed(source))
-    val catchall: Task[BufferedSource] = invalidFileEffect.catchAll(_ => validFileEffect)
-    val retryOrElse = invalidFileEffect.retryOrElse( Schedule.once, (_: Throwable,_: Unit) => validFileEffect)
+    val fallback = open("build.sat") orElse open("build.sbt")
+    val fold: Task[BufferedSource] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
+    val catchall: Task[BufferedSource] = open("build.sat").catchAll(_ => open("build.sbt"))
+    val retryOrElse = open("build.sat").retryOrElse( Schedule.once, (_: Throwable,_: Unit) => open("build.sbt"))
 
     runtime.unsafeRun( fallback ).mkString.nonEmpty shouldBe true
     runtime.unsafeRun( fold ).mkString.nonEmpty shouldBe true
@@ -56,10 +57,9 @@ class ZioTest extends FunSuite with Matchers {
     runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
   }
 
-/*  test("bracket") { TODO! Fix bracket type mismatch error!
-      def open(file: String): Task[BufferedSource] = ZIO.effect(Source.fromFile(file, utf8))
-      def close(source: BufferedSource): Task[Unit] = ZIO.effect(source.close)
-      val fileContent: Task[String] = open("build.sbt").bracket(source => close(source)) { source => ZIO.effect(source.mkString) }
-      runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
-  }*/
+/* TODO! Fix bracket type mismatch error!
+  test("bracket") {
+    val fileContent: Task[String] = open("build.sbt").bracket(close(_)) { source => ZIO.effect(source.mkString) }
+    runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
+  } */
 }
