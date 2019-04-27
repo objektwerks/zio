@@ -13,7 +13,7 @@ class ZioTest extends FunSuite with Matchers {
 
   def open(file: String): Task[BufferedSource] = ZIO.effect(Source.fromFile(file, utf8))
 
-  def close(source: BufferedSource): Task[Unit] = ZIO.effect(source.close)
+  def close(source: BufferedSource): Task[Unit] = ZIO.effect { try { source.close() } finally { () } }
 
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
