@@ -10,13 +10,10 @@ import scala.util.Try
 class ZioTest extends FunSuite with Matchers {
   val runtime = new DefaultRuntime {}
 
-  def open(file: String): Task[String] = ZIO.effect {
-    var source: BufferedSource = null
-    try {
-      source = Source.fromFile(file, Codec.UTF8.name)
-      source.mkString
-    } finally { source.close }
-  }
+  def close(source: BufferedSource): Task[Unit] = ZIO.effect( source.close )
+
+  def open(file: String): Task[String] = ZIO.effect( Source.fromFile(file, Codec.UTF8.name) )
+    .bracket( close(_).catchAll(_ => Task.unit) ) { source => ZIO.effect( source.mkString ) }
 
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
