@@ -4,14 +4,19 @@ import org.scalatest.{FunSuite, Matchers}
 import scalaz.zio.{DefaultRuntime, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
-import scala.io.{Codec, Source}
+import scala.io.{BufferedSource, Codec, Source}
 import scala.util.Try
 
 class ZioTest extends FunSuite with Matchers {
   val runtime = new DefaultRuntime {}
 
-  def open(file: String): Task[String] = ZIO.effect(Source.fromFile(file, Codec.UTF8.name))
-    .bracket(source => ZIO.effect(source.close).catchAll(_ => Task.unit))(source => ZIO.effect(source.mkString))
+  def file(file: String): Task[String] = {
+    def close(source: BufferedSource): Task[Unit] = ZIO.effect(source.close)
+
+    def read(source: BufferedSource): Task[String] = ZIO.effect(source.mkString)
+
+    ZIO.effect(Source.fromFile(file, Codec.UTF8.name)).bracket(close(_).catchAll(_ => Task.unit))(s => read(s))
+  }
 
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
@@ -27,22 +32,22 @@ class ZioTest extends FunSuite with Matchers {
   }
 
   test("errors") {
-    val fallback = open("build.sat") orElse open("build.sbt")
+    val fallback = file("build.sat") orElse file("build.sbt")
     runtime.unsafeRun( fallback ).nonEmpty shouldBe true
 
-    val fold: Task[String] = open("build.sat").foldM(_ => open("build.sbt"), source => ZIO.succeed(source))
+    val fold: Task[String] = file("build.sat").foldM(_ => file("build.sbt"), source => ZIO.succeed(source))
     runtime.unsafeRun( fold ).nonEmpty shouldBe true
 
-    val catchall: Task[String] = open("build.sat").catchAll(_ => open("build.sbt"))
+    val catchall: Task[String] = file("build.sat").catchAll(_ => file("build.sbt"))
     runtime.unsafeRun( catchall ).mkString.nonEmpty shouldBe true
 
-    val retryOrElse = open("build.sat").retryOrElse( Schedule.once, (_: Throwable,_: Unit) => open("build.sbt"))
+    val retryOrElse = file("build.sat").retryOrElse( Schedule.once, (_: Throwable, _: Unit) => file("build.sbt"))
     runtime.unsafeRun( retryOrElse ).mkString.nonEmpty shouldBe true
   }
 
   test("fibers") {
     val fileContent = for {
-      fiber <- open("build.sbt").fork
+      fiber <- file("build.sbt").fork
       source <- fiber.join
     } yield source.mkString
     runtime.unsafeRun( fileContent ).nonEmpty shouldBe true
