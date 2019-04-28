@@ -4,16 +4,14 @@ import org.scalatest.{FunSuite, Matchers}
 import scalaz.zio.{DefaultRuntime, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
-import scala.io.{BufferedSource, Codec, Source}
+import scala.io.{Codec, Source}
 import scala.util.Try
 
 class ZioTest extends FunSuite with Matchers {
   val runtime = new DefaultRuntime {}
 
-  def close(source: BufferedSource): Task[Unit] = ZIO.effect( source.close )
-
-  def open(file: String): Task[String] = ZIO.effect( Source.fromFile(file, Codec.UTF8.name) )
-    .bracket( close(_).catchAll(_ => Task.unit) ) { source => ZIO.effect( source.mkString ) }
+  def open(file: String): Task[String] = ZIO.effect(Source.fromFile(file, Codec.UTF8.name))
+    .bracket(source => ZIO.effect(source.close).catchAll(_ => Task.unit))(source => ZIO.effect(source.mkString))
 
   test("effects") {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
