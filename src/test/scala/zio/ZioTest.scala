@@ -1,7 +1,7 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, FiberLocal, Schedule, Task, ZIO}
+import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
@@ -72,5 +72,15 @@ class ZioTest extends FunSuite with Matchers {
       _     <- local.empty
     } yield value
     runtime.unsafeRun( fiberLocalInt ).get shouldBe 3
+  }
+
+  test("managed resource") {
+    def resource(file: String): Task[BufferedSource] = ZIO.effect(Source.fromFile(file, Codec.UTF8.name))
+    def close(source: BufferedSource): Task[Unit] = ZIO.effect(source.close)
+    def tostring(source: BufferedSource): Task[String] = ZIO.effect(source.mkString)
+
+    val managed = Managed.make(resource("build.sbt"))(close(_).catchAll(_ => Task.unit))
+    val task: Task[String] = managed.use { source => tostring(source) }
+    runtime.unsafeRun( task ).nonEmpty shouldBe true
   }
 }
