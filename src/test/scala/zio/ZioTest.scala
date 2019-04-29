@@ -1,7 +1,7 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Ref, Schedule, Task, ZIO}
+import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Queue, Ref, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
@@ -92,5 +92,14 @@ class ZioTest extends FunSuite with Matchers {
     val managed = Managed.make(resource("build.sbt"))(close(_).catchAll(_ => Task.unit))
     val task: Task[String] = managed.use { source => tostring(source) }
     runtime.unsafeRun( task ).nonEmpty shouldBe true
+  }
+
+  test("queue") {
+    val queueInt = for {
+      queue  <- Queue.bounded[Int](3)
+      _      <- queue.offer(3)
+      result <- queue.take
+    } yield result
+    runtime.unsafeRun( queueInt ) shouldBe 3
   }
 }
