@@ -1,7 +1,7 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Schedule, Task, ZIO}
+import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Ref, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
@@ -72,6 +72,16 @@ class ZioTest extends FunSuite with Matchers {
       _     <- local.empty
     } yield value
     runtime.unsafeRun( fiberLocalInt ).get shouldBe 3
+  }
+
+  test("ref") {
+    val refInt = for {
+      ref     <- Ref.make(3)
+      initial <- ref.get
+      _       <- ref.set(initial * 3)
+      result  <- ref.get
+    } yield result
+    runtime.unsafeRun( refInt ) shouldBe 9
   }
 
   test("managed resource") {
