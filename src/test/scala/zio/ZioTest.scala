@@ -1,7 +1,7 @@
 package zio
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, Schedule, Task, ZIO}
+import scalaz.zio.{DefaultRuntime, FiberLocal, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
@@ -62,5 +62,15 @@ class ZioTest extends FunSuite with Matchers {
       tuple <- fiber.join
     } yield tuple._1 + tuple._2
     runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
+  }
+
+  test("fiber local") {
+    val fiberLocalInt = for {
+      local <- FiberLocal.make[Int]
+      _     <- local.set(3)
+      value <- local.get
+      _     <- local.empty
+    } yield value
+    runtime.unsafeRun( fiberLocalInt ).get shouldBe 3
   }
 }
