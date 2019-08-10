@@ -3,7 +3,7 @@ package objektwerks
 import zio.ZIO
 
 class FiberTest extends ZioTest {
-  test("fibers") {
+  test("fiber") {
     val fileContent = for {
       fiber <- file("build.sbt").fork
       source <- fiber.join

@@ -13,8 +13,10 @@ trait ZioTest extends FunSuite with Matchers {
 
     def read(source: BufferedSource): Task[String] = ZIO.effect(source.mkString)
 
-    def open(file: String): Task[String] = ZIO.effect(Source.fromFile(file, Codec.UTF8.name))
-      .bracket(close(_).catchAll(_ => Task.unit))(source => read(source))
+    def open(file: String): Task[String] = ZIO
+      .effect(Source.fromFile(file, Codec.UTF8.name))
+      .bracket(close(_)
+      .catchAll(_ => Task.unit))(source => read(source))
 
     open(file)
   }
