@@ -11,8 +11,8 @@ object ZioConsoleApp extends ZioApp {
   def run(args: List[String]): ZIO[Console, Nothing, Int] = program.fold(_ => error, _ => success)
 
   val program = for {
-    _ <- putStrLn("Hello! What is your name?")
-    n <- getStrLn
-    _ <- putStrLn(s"Hello, $n, welcome to ZIO!")
+    _    <- putStrLn("Hello! What is your name?")
+    name <- getStrLn
+    _    <- putStrLn(s"Hello, $name, welcome to ZIO!")
   } yield ()
 }
