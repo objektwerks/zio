@@ -1,7 +1,7 @@
-package zio
+package objektwerks
 
 import org.scalatest.{FunSuite, Matchers}
-import scalaz.zio.{DefaultRuntime, FiberLocal, Managed, Queue, Ref, Schedule, Task, ZIO}
+import zio._
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
@@ -64,14 +64,13 @@ class ZioTest extends FunSuite with Matchers {
     runtime.unsafeRun( helloWorld ) shouldBe "Hello, world!"
   }
 
-  test("fiber local") {
-    val fiberLocalInt = for {
-      local <- FiberLocal.make[Int]
-      _     <- local.set(3)
-      value <- local.get
-      _     <- local.empty
+  test("fiber ref") {
+    val fiberRefInt = for {
+      fiberRef <- FiberRef.make[Int](0)
+      _        <- fiberRef.set(3)
+      value    <- fiberRef.get
     } yield value
-    runtime.unsafeRun( fiberLocalInt ).get shouldBe 3
+    runtime.unsafeRun( fiberRefInt ) shouldBe 3
   }
 
   test("ref") {

@@ -1,9 +1,10 @@
-package zio
+package objektwerks
 
-import scalaz.zio.console.{Console, getStrLn, putStrLn}
-import scalaz.zio.{App, ZIO}
+import zio.ZIO
+import zio.{ App => ZioApp }
+import zio.console._
 
-object ZioApp extends App {
+object ZioConsoleApp extends ZioApp {
   val error = 1
   val success = 0
 
