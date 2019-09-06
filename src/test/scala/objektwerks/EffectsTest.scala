@@ -10,7 +10,7 @@ class EffectsTest extends ZioTest {
     runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty shouldBe true
 
     runtime.unsafeRun( ZIO.succeed(33) ) shouldBe 33
-    runtime.unsafeRun( ZIO.succeedLazy( List(1, 2, 3).sum ) ) shouldBe 6
+    runtime.unsafeRun( ZIO.effectTotal( List(1, 2, 3).sum ) ) shouldBe 6
 
     runtime.unsafeRun( ZIO.fromOption(Some(3)).map(_ * 2) ) shouldBe 6
     runtime.unsafeRun( ZIO.fromEither(Right(3)).map(_ * 2) ) shouldBe 6
