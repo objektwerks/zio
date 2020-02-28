@@ -1,10 +1,9 @@
 package objektwerks
 
-import zio.ZIO
-import zio.{ App => ZioApp }
+import zio.{App, ZIO}
 import zio.console._
 
-object ZioConsoleApp extends ZioApp {
+object ZioConsoleApp extends App {
   val error = 1
   val success = 0
 
