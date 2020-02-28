@@ -3,7 +3,7 @@ package objektwerks
 import zio.{App, ZIO}
 import zio.console._
 
-object ZioConsoleApp extends App {
+object ConsoleApp extends App {
   val error = 1
   val success = 0
 
