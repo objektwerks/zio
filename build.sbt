@@ -7,6 +7,8 @@ libraryDependencies ++= {
   Seq(
     "dev.zio" %% "zio" % zioVersion,
     "dev.zio" %% "zio-streams" % zioVersion,
+    "dev.zio" %% "zio-test" % zioVersion % Test,
+    "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
     "org.scalatest" %% "scalatest" % "3.0.8" % Test
   )
 }
