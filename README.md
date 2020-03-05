@@ -13,3 +13,7 @@ Bloop
 3. bloop clean zio
 4. bloop compile zio
 5. bloop test zio
+
+Zio
+---
+1. sbt test:run
