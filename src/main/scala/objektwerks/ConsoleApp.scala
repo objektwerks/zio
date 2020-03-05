@@ -1,7 +1,7 @@
 package objektwerks
 
-import zio.{App, ZIO}
 import zio.console._
+import zio.{App, ZIO}
 
 object ConsoleApp extends App {
   val program = for {
