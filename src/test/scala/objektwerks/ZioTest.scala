@@ -11,7 +11,7 @@ import scala.util.Try
 object ZioTest extends DefaultRunnableSpec {
   val runtime = Runtime.default
 
-  def spec:Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("zio.spec.test")(
+  def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("zio.spec.test")(
     test("effects") {
       assert(runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).isLeft)(equalTo(true))
       assert(runtime.unsafeRun( ZIO.succeed(33) ))(equalTo(33))
