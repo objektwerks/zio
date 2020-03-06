@@ -8,7 +8,7 @@ import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
 import scala.util.Try
 
-object ZioSpecTest extends DefaultRunnableSpec {
+object ZioTest extends DefaultRunnableSpec {
   val runtime = Runtime.default
 
   def spec:Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("zio.spec.test")(
