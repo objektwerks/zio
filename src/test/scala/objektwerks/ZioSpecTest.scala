@@ -14,7 +14,7 @@ object ZioSpecTest extends DefaultRunnableSpec {
   def spec:Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("zio.spec.test")(
 
     test("effects") {
-      assert(runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).left.toOption.nonEmpty)(equalTo(true))
+      assert(runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).isLeft)(equalTo(true))
       assert(runtime.unsafeRun( ZIO.succeed(33) ))(equalTo(33))
       assert(runtime.unsafeRun( ZIO.effectTotal( List(1, 2, 3).sum )))(equalTo(6))
 
@@ -26,7 +26,7 @@ object ZioSpecTest extends DefaultRunnableSpec {
     },
 
     test("errors") {
-      val fallback = file("build.sat") orElse file("build.sbt")
+      val fallback: Task[String] = file("build.sat") orElse file("build.sbt")
       assert(runtime.unsafeRun( fallback ).nonEmpty)(equalTo(true))
 
       val fold: Task[String] = file("build.sat").foldM(_ => file("build.sbt"), source => ZIO.succeed(source))
@@ -35,7 +35,7 @@ object ZioSpecTest extends DefaultRunnableSpec {
       val catchall: Task[String] = file("build.sat").catchAll(_ => file("build.sbt"))
       assert(runtime.unsafeRun( catchall ).mkString.nonEmpty)(equalTo(true))
 
-      val retryOrElse = file("build.sat").retryOrElse( Schedule.once, (_: Throwable, _: Unit) => file("build.sbt"))
+      val retryOrElse: Task[String] = file("build.sat").retryOrElse( Schedule.once, (_: Throwable, _: Unit) => file("build.sbt"))
       assert(runtime.unsafeRun( retryOrElse ).mkString.nonEmpty)(equalTo(true))
     },
 
