@@ -1,8 +1,8 @@
 package objektwerks
 
-import zio.{FiberRef, Managed, Queue, Ref, Runtime, Schedule, Task, ZIO}
-import zio.test._
 import zio.test.Assertion._
+import zio.test._
+import zio.{FiberRef, Managed, Queue, Ref, Runtime, Schedule, Task, ZIO}
 
 import scala.concurrent.Future
 import scala.io.{BufferedSource, Codec, Source}
