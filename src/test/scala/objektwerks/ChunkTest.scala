@@ -16,6 +16,12 @@ object ChunkTest extends ZioTest {
 
       assert(chunk.collectWhile { case i if i % 2 != 0 => i })(equalTo(Chunk(1)))
       assert(chunk.collectWhile { case i if i < 3 => i })(equalTo(Chunk(1, 2)))
+
+      assert(chunk.dropWhile(_ % 2 != 0))(equalTo(Chunk(2, 3)))
+      assert(chunk.takeWhile(_ % 2 != 0))(equalTo(Chunk(1)))
+
+      assert(chunk.drop(2))(equalTo(Chunk(3)))
+      assert(chunk.take(2))(equalTo(Chunk(1, 2)))
     }
   )
 }
