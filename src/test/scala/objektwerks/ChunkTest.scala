@@ -13,6 +13,9 @@ object ChunkTest extends ZioTest {
 
       assert(chunk.collect { case i => i * 3 })(equalTo(Chunk(3, 6, 9)))
       assert(chunk.collect { case i => i * 3 }.toList.sum)(equalTo(18))
+
+      assert(chunk.collectWhile { case i if i % 2 != 0 => i })(equalTo(Chunk(1)))
+      assert(chunk.collectWhile { case i if i < 3 => i })(equalTo(Chunk(1, 2)))
     }
   )
 }
