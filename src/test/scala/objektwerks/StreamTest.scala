@@ -14,6 +14,7 @@ object StreamTest extends ZioTest {
       assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.await[Int]) ))(equalTo(1))
       assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.identity[Int].optional) ))(equalTo(Option(1)))
       assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.collectAll[Int]) ))(equalTo(List(1, 2, 3)))
+      assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.collectAllWhile[Int](_ < 3)) ))(equalTo(List(1, 2)))
       assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.foldLeft[Int, Int](0)(_ + _)) ))(equalTo(6))
       assert( runtime.unsafeRun( Stream(1, 2, 3).run(Sink.fromFunction[Int, Int](_ * 2).collectAll) ))(equalTo(List(2, 4, 6)))
     }
