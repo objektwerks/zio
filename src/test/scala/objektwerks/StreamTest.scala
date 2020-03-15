@@ -9,6 +9,7 @@ object StreamTest extends ZioTest {
     test("stream") {
       assert( runtime.unsafeRun( Stream(1, 2, 3).fold(0)(_ + _) ) )(equalTo(6))
       assert( runtime.unsafeRun( Stream(1, 2, 3).map(_ * 2).fold(0)(_ + _)) )(equalTo(12))
+      assert( runtime.unsafeRun( Stream(1, 2, 3).merge(Stream(4, 5, 6)).fold(0)(_ + _)) )(equalTo(21))
     }
   )
 }
