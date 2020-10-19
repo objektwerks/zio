@@ -2,7 +2,7 @@ package objektwerks
 
 import zio.test.Assertion.isTrue
 import zio.test._
-import zio.{Schedule, Task, ZIO}
+import zio.{Task, ZIO}
 
 object ErrorTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("error.test")(
@@ -15,9 +15,6 @@ object ErrorTest extends ZioTest {
 
       val catchall: Task[String] = file("build.sat").catchAll(_ => file("build.sbt"))
       assert(runtime.unsafeRun( catchall ).mkString.nonEmpty)(isTrue)
-
-      val retryOrElse: Task[String] = file("build.sat").retryOrElse( Schedule.once, (_: Throwable, _: Unit) => file("build.sbt"))
-      assert(runtime.unsafeRun( retryOrElse ).mkString.nonEmpty)(isTrue)
     }
   )
 }
