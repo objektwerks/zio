@@ -6,10 +6,10 @@ Test
 ----
 1. sbt clean test
 
-Bloop
------
-1. sbt bloopInstall
-2. bloop projects
-3. bloop clean zio
-4. bloop compile zio
-5. bloop test zio
+Run
+---
+1. sbt run
+>Multiple main classes detected. Select one to run:
+  1. objektwerks.ConsoleApp
+  2. objektwerks.ConsoleHorizontalLayerApp
+  3. objektwerks.ConsoleVerticalLayerApp
