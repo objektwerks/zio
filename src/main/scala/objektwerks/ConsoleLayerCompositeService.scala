@@ -9,9 +9,9 @@ object ConsoleLayerCompositeService {
   type ConsoleLayerCompositeServiceEnv = Has[ConsoleLayerCompositeService.Service]
 
   class Service(service: ConsoleLayerService.Service, store: ConsoleLayerStore.Service) {
-    def notifyAndStore(message: Message): Task[Message] = {
+    def printAndStore(message: Message): Task[Message] = {
       for {
-        m <- service.notify(message)
+        m <- service.print(message)
         _ <- store.store(m)
       } yield message
     }
@@ -19,9 +19,9 @@ object ConsoleLayerCompositeService {
 
   val live: ZLayer[ConsoleLayerServiceEnv with ConsoleLayerStoreEnv, Nothing, ConsoleLayerCompositeServiceEnv] =
     ZLayer
-    .fromServices[ConsoleLayerService.Service, ConsoleLayerStore.Service, ConsoleLayerCompositeService.Service]( (service, store) =>
-      new Service(service, store)
+    .fromServices[ConsoleLayerService.Service, ConsoleLayerStore.Service, ConsoleLayerCompositeService.Service]( 
+      (service, store) => new Service(service, store)
     )
 
-  def notifyAndStore(message: Message): ZIO[ConsoleLayerCompositeServiceEnv, Throwable, Message] = ZIO.accessM(_.get.notifyAndStore(message))
+  def printAndStore(message: Message): ZIO[ConsoleLayerCompositeServiceEnv, Throwable, Message] = ZIO.accessM(_.get.printAndStore(message))
 }

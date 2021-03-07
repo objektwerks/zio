@@ -6,13 +6,12 @@ object ConsoleHorizontalLayerApp extends zio.App {
   import ConsoleLayerService._
   import ConsoleLayerStore._
 
-  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] = 
+  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] =
     ConsoleLayerService.live ++ ConsoleLayerStore.live
 
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
     ConsoleLayerService
-      .notify( Message("Horizontal layer test message!") )
+      .print( Message("Horizontal layer test message!") )
       .provideLayer(serviceStoreLayer) // ConsoleLayerStore is never called!
       .exitCode
-  }
 }

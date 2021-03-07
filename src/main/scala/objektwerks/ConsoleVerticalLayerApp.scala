@@ -7,16 +7,18 @@ object ConsoleVerticalLayerApp extends zio.App {
   import ConsoleLayerStore._
   import ConsoleLayerCompositeService._
 
-  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] = 
+  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] =
     ConsoleLayerService.live ++ ConsoleLayerStore.live
 
   val compositeLayer: ZLayer[Any, Throwable, ConsoleLayerCompositeServiceEnv] =
     serviceStoreLayer >>> ConsoleLayerCompositeService.live
 
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
-    ConsoleLayerService
-      .notify( Message("Vertical layer test message!") )
-      .provideLayer(serviceStoreLayer) // ConsoleLayerStore is never called!
-      .exitCode
-  }
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
+    ConsoleLayerCompositeService.printAndStore( Message("Vertical layer test message!") )
+      .provideLayer(compositeLayer)
+      .catchAll(t => ZIO.succeed(t.printStackTrace()).map(_ => ExitCode.failure))
+      .map { message =>
+        println(s"[ConsoleVerticalLayerApp] Printed and stored message: $message")
+        ExitCode.success
+      }
 }
