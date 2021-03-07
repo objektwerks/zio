@@ -3,20 +3,20 @@ package objektwerks
 import zio.{ZIO, Has, Task, ZLayer}
 
 object ConsolePrinter {
-  type PrintService = Has[ConsolePrinter.Service]
+  type Printer = Has[ConsolePrinter.Service]
 
   trait Service {
     def print(message: Message): Task[Message]
   }
   
-  val live: ZLayer[Any, Nothing, PrintService] = ZLayer.succeed {
+  val live: ZLayer[Any, Nothing, Printer] = ZLayer.succeed {
     new Service {
       override def print(message: Message): Task[Message] = Task {
-        println(s"[ConsoleLayerService] printed: $message")
+        println(s"[Printer] printed: $message")
         message
       }
     } 
   }
 
-  def print(message: Message): ZIO[PrintService, Throwable, Message] = ZIO.accessM(_.get.print(message))
+  def print(message: Message): ZIO[Printer, Throwable, Message] = ZIO.accessM(_.get.print(message))
 }

@@ -6,11 +6,11 @@ object ConsoleHorizontalLayerApp extends zio.App {
   import ConsolePrinter._
   import ConsoleStore._
 
-  val serviceStoreLayer: ZLayer[Any, Nothing, PrintService with StoreService] =
+  val serviceStoreLayer: ZLayer[Any, Nothing, Printer with Store] =
     ConsolePrinter.live ++ ConsoleStore.live
 
-  val program: ZIO[PrintService with StoreService, Throwable, Message] = for {
-    m  <- print( Message("Horizontal layer test message!") )
+  val program: ZIO[Printer with Store, Throwable, Message] = for {
+    m  <- print( Message("Horizontal layer app message!") )
     mm <- store(m)
   } yield mm
 
@@ -19,7 +19,7 @@ object ConsoleHorizontalLayerApp extends zio.App {
       .provideLayer(serviceStoreLayer)
       .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>
-        println(s"[ConsoleHorizontalLayerApp] Printed and stored message: $message")
+        println(s"[App] Printed and stored message: $message")
         ExitCode.success
       }
 }
