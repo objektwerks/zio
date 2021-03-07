@@ -11,9 +11,9 @@ object ConsoleLayerCompositeService {
   class Service(service: ConsoleLayerService.Service, store: ConsoleLayerStore.Service) {
     def printAndStore(message: Message): Task[Message] = {
       for {
-        m <- service.print(message)
-        _ <- store.store(m)
-      } yield m
+        m  <- service.print(message)
+        mm <- store.store(m)
+      } yield mm
     }
   }
 

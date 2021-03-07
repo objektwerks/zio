@@ -10,14 +10,14 @@ object ConsoleHorizontalLayerApp extends zio.App {
     ConsoleLayerService.live ++ ConsoleLayerStore.live
 
   val program: ZIO[ConsoleLayerServiceEnv with ConsoleLayerStoreEnv, Throwable, Message] = for {
-    m <- print( Message("Horizontal layer test message!") )
-    _ <- store(m)
-  } yield m
+    m  <- print( Message("Horizontal layer test message!") )
+    mm <- store(m)
+  } yield mm
 
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
     program
       .provideLayer(serviceStoreLayer)
-      .catchAll(error => ZIO.succeed( error.printStackTrace()).map(_ => ExitCode.failure) )
+      .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>
         println(s"[ConsoleHorizontalLayerApp] Printed and stored message: $message")
         ExitCode.success

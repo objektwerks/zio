@@ -16,7 +16,7 @@ object ConsoleVerticalLayerApp extends zio.App {
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
     ConsoleLayerCompositeService.printAndStore( Message("Vertical layer test message!") )
       .provideLayer(compositeLayer)
-      .catchAll(error => ZIO.succeed( error.printStackTrace()).map(_ => ExitCode.failure) )
+      .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>
         println(s"[ConsoleVerticalLayerApp] Printed and stored message: $message")
         ExitCode.success
