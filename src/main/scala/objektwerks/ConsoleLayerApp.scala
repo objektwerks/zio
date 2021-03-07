@@ -1,11 +1,17 @@
 package objektwerks
 
-import zio.{ExitCode, ZEnv, ZIO}
+import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 
 object ConsoleLayerApp extends zio.App {
+  import ConsoleLayerService._
+  import ConsoleLayerStore._
+
+  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] = 
+    ConsoleLayerService.live ++ ConsoleLayerStore.live
+
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
     ConsoleLayerService
       .notify( Message("Test message!"))
-      .provideLayer(ConsoleLayerService.live)
+      .provideLayer(serviceStoreLayer)
       .exitCode
 }

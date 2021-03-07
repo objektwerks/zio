@@ -9,12 +9,13 @@ object ConsoleLayerService {
     def notify(message: Message): Task[Unit]
   }
   
-  val live: ZLayer[Any, Nothing, ConsoleLayerServiceEnv] = ZLayer.succeed( new Service {
-    override def notify(message: Message): Task[Unit] =
-      Task {
+  val live: ZLayer[Any, Nothing, ConsoleLayerServiceEnv] = ZLayer.succeed {
+    new Service {
+      override def notify(message: Message): Task[Unit] = Task {
         println(s"[ConsoleLayerService] message: ${message.text}")
       }
-  } )
+    } 
+  }
 
   def notify(message: Message): ZIO[ConsoleLayerServiceEnv, Throwable, Unit] = ZIO.accessM(_.get.notify(message))
 }
