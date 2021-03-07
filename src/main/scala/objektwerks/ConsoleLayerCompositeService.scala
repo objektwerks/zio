@@ -13,7 +13,7 @@ object ConsoleLayerCompositeService {
       for {
         m <- service.print(message)
         _ <- store.store(m)
-      } yield message
+      } yield m
     }
   }
 
