@@ -2,7 +2,7 @@ package objektwerks
 
 import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 
-object ConsoleHorizontalLayerApp extends zio.App {
+object ConsoleVerticalLayerApp extends zio.App {
   import ConsoleLayerService._
   import ConsoleLayerStore._
 
@@ -11,7 +11,7 @@ object ConsoleHorizontalLayerApp extends zio.App {
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
     ConsoleLayerService
-      .notify( Message("Horizontal layer test message!") )
+      .notify( Message("Vertical layer test message!") )
       .provideLayer(serviceStoreLayer) // ConsoleLayerStore is never called!
       .exitCode
   }
