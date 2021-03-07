@@ -11,7 +11,7 @@ object ConsoleLayerApp extends zio.App {
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
     ConsoleLayerService
-      .notify( Message("Test message!"))
+      .notify( Message("Test message!") )
       .provideLayer(serviceStoreLayer)
       .exitCode
 }
