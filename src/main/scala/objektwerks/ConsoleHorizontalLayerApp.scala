@@ -2,7 +2,7 @@ package objektwerks
 
 import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 
-object ConsoleLayerApp extends zio.App {
+object ConsoleHorizontalLayerApp extends zio.App {
   import ConsoleLayerService._
   import ConsoleLayerStore._
 
