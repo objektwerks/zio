@@ -9,9 +9,10 @@ object ConsoleHorizontalLayerApp extends zio.App {
   val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] = 
     ConsoleLayerService.live ++ ConsoleLayerStore.live
 
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
     ConsoleLayerService
       .notify( Message("Test message!") )
-      .provideLayer(serviceStoreLayer)
+      .provideLayer(serviceStoreLayer) // ConsoleLayerStore is never called!
       .exitCode
+  }
 }
