@@ -5,9 +5,13 @@ import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 object ConsoleVerticalLayerApp extends zio.App {
   import ConsoleLayerService._
   import ConsoleLayerStore._
+  import ConsoleLayerCompositeService._
 
   val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] = 
     ConsoleLayerService.live ++ ConsoleLayerStore.live
+
+  val compositeLayer: ZLayer[Any, Throwable, ConsoleLayerCompositeServiceEnv] =
+    serviceStoreLayer >>> ConsoleLayerCompositeService.live
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] = {
     ConsoleLayerService
