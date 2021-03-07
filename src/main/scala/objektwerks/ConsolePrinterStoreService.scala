@@ -2,11 +2,11 @@ package objektwerks
 
 import zio.{Has, Task, ZIO, ZLayer}
 
-object ConsolePrintStoreService {
+object ConsolePrinterStoreService {
   import ConsolePrinter._
   import ConsoleStore._
 
-  type PrintStoreService = Has[ConsolePrintStoreService.Service]
+  type PrinterStoreService = Has[ConsolePrinterStoreService.Service]
 
   class Service(service: ConsolePrinter.Service, store: ConsoleStore.Service) {
     def printAndStore(message: Message): Task[Message] = {
@@ -17,11 +17,11 @@ object ConsolePrintStoreService {
     }
   }
 
-  val live: ZLayer[PrintService with StoreService, Nothing, PrintStoreService] =
+  val live: ZLayer[PrintService with StoreService, Nothing, PrinterStoreService] =
     ZLayer
-    .fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrintStoreService.Service]( 
+    .fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrinterStoreService.Service]( 
       (service, store) => new Service(service, store)
     )
 
-  def printAndStore(message: Message): ZIO[PrintStoreService, Throwable, Message] = ZIO.accessM(_.get.printAndStore(message))
+  def printAndStore(message: Message): ZIO[PrinterStoreService, Throwable, Message] = ZIO.accessM(_.get.printAndStore(message))
 }
