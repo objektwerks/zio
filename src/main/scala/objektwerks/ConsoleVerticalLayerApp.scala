@@ -5,16 +5,16 @@ import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 object ConsoleVerticalLayerApp extends zio.App {
   import ConsolePrinter._
   import ConsoleStore._
-  import ConsolePrinterStoreService._
+  import ConsolePrinterStore._
 
   val serviceStoreLayer: ZLayer[Any, Nothing, PrintService with StoreService] =
     ConsolePrinter.live ++ ConsoleStore.live
 
   val compositeLayer: ZLayer[Any, Throwable, PrinterStoreService] =
-    serviceStoreLayer >>> ConsolePrinterStoreService.live
+    serviceStoreLayer >>> ConsolePrinterStore.live
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
-    ConsolePrinterStoreService.printAndStore( Message("Vertical layer test message!") )
+    ConsolePrinterStore.printAndStore( Message("Vertical layer test message!") )
       .provideLayer(compositeLayer)
       .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>
