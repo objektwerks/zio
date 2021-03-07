@@ -3,18 +3,18 @@ package objektwerks
 import zio.{ExitCode, ZEnv, ZLayer, ZIO}
 
 object ConsoleVerticalLayerApp extends zio.App {
-  import ConsoleLayerService._
-  import ConsoleLayerStore._
-  import ConsoleLayerCompositeService._
+  import ConsolePrinter._
+  import ConsoleStore._
+  import ConsolePrintStoreService._
 
-  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] =
-    ConsoleLayerService.live ++ ConsoleLayerStore.live
+  val serviceStoreLayer: ZLayer[Any, Nothing, PrintService with StoreService] =
+    ConsolePrinter.live ++ ConsoleStore.live
 
-  val compositeLayer: ZLayer[Any, Throwable, ConsoleLayerCompositeServiceEnv] =
-    serviceStoreLayer >>> ConsoleLayerCompositeService.live
+  val compositeLayer: ZLayer[Any, Throwable, PrintStoreService] =
+    serviceStoreLayer >>> ConsolePrintStoreService.live
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
-    ConsoleLayerCompositeService.printAndStore( Message("Vertical layer test message!") )
+    ConsolePrintStoreService.printAndStore( Message("Vertical layer test message!") )
       .provideLayer(compositeLayer)
       .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>

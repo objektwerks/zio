@@ -3,13 +3,13 @@ package objektwerks
 import zio.{ExitCode, URIO, ZEnv, ZLayer, ZIO}
 
 object ConsoleHorizontalLayerApp extends zio.App {
-  import ConsoleLayerService._
-  import ConsoleLayerStore._
+  import ConsolePrinter._
+  import ConsoleStore._
 
-  val serviceStoreLayer: ZLayer[Any, Nothing, ConsoleLayerServiceEnv with ConsoleLayerStoreEnv] =
-    ConsoleLayerService.live ++ ConsoleLayerStore.live
+  val serviceStoreLayer: ZLayer[Any, Nothing, PrintService with StoreService] =
+    ConsolePrinter.live ++ ConsoleStore.live
 
-  val program: ZIO[ConsoleLayerServiceEnv with ConsoleLayerStoreEnv, Throwable, Message] = for {
+  val program: ZIO[PrintService with StoreService, Throwable, Message] = for {
     m  <- print( Message("Horizontal layer test message!") )
     mm <- store(m)
   } yield mm
