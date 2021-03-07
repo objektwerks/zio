@@ -2,8 +2,6 @@ package objektwerks
 
 import zio.{ZIO, Has, Task, ZLayer}
 
-case class Message(text: String)
-
 object ConsoleLayerService {
   type ConsoleLayerServiceEnv = Has[ConsoleLayerService.Service]
 
