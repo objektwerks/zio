@@ -1,20 +1,19 @@
 package objektwerks
 
-import zio.{ExitCode, URIO, ZEnv, ZLayer, ZIO}
+import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 
-object ConsoleHorizontalLayerApp extends zio.App {
+object ConsoleHorizontalLayerApp extends App {
   import ConsolePrinter._
   import ConsoleStore._
+  import ConsolePrinterStoreLayers._
 
-  val printerStoreHorizontalLayer: ZLayer[Any, Nothing, Printer with Store] = ConsolePrinter.live ++ ConsoleStore.live
-
-  val program: ZIO[Printer with Store, Throwable, Message] = for {
-    m  <- print( Message("Horizontal layer app message!") )
-    mm <- store(m)
-  } yield mm
+  val app: ZIO[Printer with Store, Throwable, Message] = for {
+    printedMessage <- print( Message("Horizontal layer app message!") )
+    storedMessage  <- store(printedMessage)
+  } yield storedMessage
 
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
-    program
+    app
       .provideLayer(printerStoreHorizontalLayer)
       .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>

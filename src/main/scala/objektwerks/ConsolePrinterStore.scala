@@ -11,15 +11,14 @@ object ConsolePrinterStore {
   class Service(printer: ConsolePrinter.Service, store: ConsoleStore.Service) {
     def printAndStore(message: Message): Task[Message] = {
       for {
-        m  <- printer.print(message)
-        mm <- store.store(m)
-      } yield mm
+        printedMessage <- printer.print(message)
+        storedMessage  <- store.store(printedMessage)
+      } yield storedMessage
     }
   }
 
   val live: ZLayer[Printer with Store, Nothing, PrinterStore] =
-    ZLayer
-    .fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrinterStore.Service]( 
+    ZLayer.fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrinterStore.Service]( 
       (printer, store) => new Service(printer, store)
     )
 
