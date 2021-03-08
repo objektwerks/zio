@@ -7,13 +7,13 @@ object ConsoleHorizontalLayerApp extends App {
   import ConsoleStore._
   import ConsolePrinterStoreLayers._
 
-  val app: ZIO[Printer with Store, Throwable, Message] = for {
+  val effect: ZIO[Printer with Store, Throwable, Message] = for {
     printedMessage <- print( Message("Horizontal layer app message!") )
     storedMessage  <- store(printedMessage)
   } yield storedMessage
 
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
-    app
+    effect
       .provideLayer(printerStoreHorizontalLayer)
       .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
       .map { message =>
