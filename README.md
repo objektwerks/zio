@@ -2,6 +2,11 @@ ZIO
 ---
 >ZIO feature tests.
 
+Macros
+------
+>The zio-macros library contains the @accessible annotation, allowing for the
+>auto-generation of ZIO accessors. See ConsoleStore for an example.
+
 Test
 ----
 1. sbt clean test
