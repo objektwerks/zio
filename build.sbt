@@ -7,8 +7,10 @@ libraryDependencies ++= {
   Seq(
     "dev.zio" %% "zio" % zioVersion,
     "dev.zio" %% "zio-streams" % zioVersion,
+    "dev.zio" %% "zio-macros" % zioVersion,
     "dev.zio" %% "zio-test" % zioVersion % Test,
     "dev.zio" %% "zio-test-sbt" % zioVersion % Test
   )
 }
+scalacOptions += "-Ymacro-annotations"
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
