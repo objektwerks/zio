@@ -1,6 +1,6 @@
 package objektwerks
 
-import java.io.File
+import com.typesafe.config.ConfigFactory
 
 import zio.config._
 import zio.config.magnolia.DeriveConfigDescriptor.descriptor
@@ -13,7 +13,7 @@ object ConsoleConfig {
   val desc = descriptor[ConsoleConfig]
 
   def load(path: String): Either[ReadError[String], ConsoleConfig] =
-    TypesafeConfigSource.fromHoconFile( new File(path) ) match {
+    TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) ) match {
       case Right(source) => read(descriptor[ConsoleConfig] from source)
       case Left(error) => Left(error)
     }

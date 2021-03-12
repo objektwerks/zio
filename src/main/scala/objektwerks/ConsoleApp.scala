@@ -6,7 +6,7 @@ import zio.console._
 import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 
 object ConsoleApp extends App {
-  val conf = ConsoleConfig.load("./src/main/resources/console.conf").getOrElse(ConsoleConfig.empty)
+  val conf = ConsoleConfig.load("console.conf").getOrElse(ConsoleConfig.empty)
 
   val effect: ZIO[ZEnv, IOException, Unit] = for {
     _    <- putStrLn(conf.question)
