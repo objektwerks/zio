@@ -6,7 +6,7 @@ import zio.console._
 import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 
 object ConsoleApp extends App {
-  val effect: ZIO[Console, IOException, Unit] = for {
+  val effect: ZIO[ZEnv, IOException, Unit] = for {
     _    <- putStrLn("What is your name?")
     name <- getStrLn
     _    <- putStrLn(s"$name, welcome to ZIO!")
