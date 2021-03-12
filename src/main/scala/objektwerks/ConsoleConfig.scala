@@ -17,20 +17,20 @@ object ConsoleConfig {
   type Config = Has[ConsoleConfig.Service]
 
   trait Service {
-    def load(path: String): Task[Either[ReadError[String], ConsoleConfig]]
+    def load(path: String): Task[ConsoleConfig]
   }
 
   val live: ZLayer[Any, Nothing, Config] = ZLayer.succeed {
     new Service {
-      override def load(path: String): Task[Either[ReadError[String], ConsoleConfig]] = Task {
+      override def load(path: String): Task[ConsoleConfig] = Task {
         toConfig(path)
       }
     }
   }
 
-  def toConfig(path: String): Either[ReadError[String], ConsoleConfig] =
+  def toConfig(path: String): ConsoleConfig =
     TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) ) match {
-      case Right(source) => read(descriptor[ConsoleConfig] from source)
-      case Left(error) => Left(error)
+      case Right(source) => read(descriptor[ConsoleConfig] from source).getOrElse(empty)
+      case Left(error) => empty
     }
 }
