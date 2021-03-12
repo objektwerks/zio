@@ -10,7 +10,6 @@ case class ConsoleConfig(question: String, response: String)
 
 object ConsoleConfig {
   val empty = ConsoleConfig("", "")
-  val desc = descriptor[ConsoleConfig]
 
   def load(path: String): Either[ReadError[String], ConsoleConfig] =
     TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) ) match {
