@@ -2,15 +2,13 @@ package objektwerks
 
 import com.typesafe.config.ConfigFactory
 
-import zio.{Has, Task, ZLayer}
+import zio.{Has, Task, ZLayer, ZIO}
 import zio.config._
 import zio.config.magnolia.DeriveConfigDescriptor.descriptor
 import zio.config.typesafe.TypesafeConfigSource
-import zio.macros.accessible
 
 case class ConsoleConfig(question: String, response: String)
 
-@accessible
 object ConsoleConfig {
   val empty = ConsoleConfig("", "")
 
@@ -27,6 +25,8 @@ object ConsoleConfig {
       }
     }
   }
+
+  def load(path: String): ZIO[Config, Throwable, ConsoleConfig] = ZIO.accessM(_.get.load(path))
 
   def toConfig(path: String): ConsoleConfig = {
     val conf = for {
