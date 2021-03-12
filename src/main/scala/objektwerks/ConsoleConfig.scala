@@ -28,9 +28,11 @@ object ConsoleConfig {
     }
   }
 
-  def toConfig(path: String): ConsoleConfig =
-    TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) ) match {
-      case Right(source) => read(descriptor[ConsoleConfig] from source).getOrElse(empty)
-      case Left(error) => empty
-    }
+  def toConfig(path: String): ConsoleConfig = {
+    val conf = for {
+      source <- TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) )
+      conf   <- read(descriptor[ConsoleConfig] from source)
+    } yield conf
+    conf.getOrElse(empty)
+  }
 }
