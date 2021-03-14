@@ -21,18 +21,14 @@ object ConsoleConfig {
   val live: ZLayer[Any, Nothing, Config] = ZLayer.succeed {
     new Service {
       override def load(path: String): Task[ConsoleConfig] = Task {
-        toConfig(path)
+        val conf = for {
+          source <- TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) )
+          conf   <- read(descriptor[ConsoleConfig] from source)
+        } yield conf
+        conf.getOrElse(empty)
       }
     }
   }
 
   def load(path: String): ZIO[Config, Throwable, ConsoleConfig] = ZIO.accessM(_.get.load(path))
-
-  def toConfig(path: String): ConsoleConfig = {
-    val conf = for {
-      source <- TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) )
-      conf   <- read(descriptor[ConsoleConfig] from source)
-    } yield conf
-    conf.getOrElse(empty)
-  }
 }
