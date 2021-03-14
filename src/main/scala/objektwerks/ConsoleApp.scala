@@ -10,9 +10,9 @@ object ConsoleApp extends App {
   val env = Logging.console() ++ ConsoleConfig.live
 
   val effect: ZIO[Console with Logging with Config, Throwable, Unit] = for {
-    _    <- log.info("Loading conf...")
+    _    <- log.info("Loading console.conf...")
     conf <- load("console.conf")
-    _    <- log.info("Loaded conf...")
+    _    <- log.info("Loaded console.conf.")
     _    <- putStrLn(conf.question)
     name <- getStrLn
     _    <- putStrLn(s"$name, ${conf.response}")
