@@ -12,6 +12,7 @@ libraryDependencies ++= {
     "dev.zio" %% "zio-config" % zioConfigVersion,
     "dev.zio" %% "zio-config-magnolia" % zioConfigVersion,
     "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
+    "dev.zio" %% "zio-logging" % "0.5.7",
     "dev.zio" %% "zio-test" % zioVersion % Test,
     "dev.zio" %% "zio-test-sbt" % zioVersion % Test
   )
