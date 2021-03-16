@@ -20,5 +20,5 @@ object ConsoleApp extends App {
   def run(args: List[String]): URIO[ZEnv, ExitCode] = 
     effect
       .provideCustomLayer(loggingConfigHorizontalLayer)
-      .fold(_ => ExitCode.failure, _ => ExitCode.success)
+      .exitCode
 }
