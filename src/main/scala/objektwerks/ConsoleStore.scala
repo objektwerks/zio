@@ -12,11 +12,9 @@ object ConsoleStore {
   }
 
   val live: ZLayer[Any, Nothing, Store] = ZLayer.succeed {
-    new Service {
-      override def store(message: Message): Task[Message] = Task {
-        println(s"[Store] stored: $message")
-        message
-      }
+    (message: Message) => Task {
+      println(s"[Store] stored: $message")
+      message
     }
   }
 
