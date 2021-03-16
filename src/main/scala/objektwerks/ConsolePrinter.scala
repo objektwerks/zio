@@ -10,12 +10,10 @@ object ConsolePrinter {
   }
   
   val live: ZLayer[Any, Nothing, Printer] = ZLayer.succeed {
-    new Service {
-      override def print(message: Message): Task[Message] = Task {
-        println(s"[Printer] printed: $message")
-        message
-      }
-    } 
+    (message: Message) => Task {
+      println(s"[Printer] printed: $message")
+      message
+    }
   }
 
   def print(message: Message): ZIO[Printer, Throwable, Message] = ZIO.accessM(_.get.print(message))
