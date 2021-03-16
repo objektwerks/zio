@@ -1,13 +1,13 @@
 package objektwerks
 
-import zio.FiberRef
+import zio.{FiberRef, ZIO}
 import zio.test.Assertion.equalTo
 import zio.test._
 
 object FiberRefTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("fiber.ref.test")(
     test("fiber.ref") {
-      val fiberRefInt = for {
+      val fiberRefInt: ZIO[Any, Nothing, Int] = for {
         fiberRef <- FiberRef.make[Int](0)
         _        <- fiberRef.set(3)
         value    <- fiberRef.get
