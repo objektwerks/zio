@@ -6,8 +6,7 @@ import zio.logging._
 
 object ConsoleApp extends App {
   import ConsoleConfig._
-
-  val env = Logging.console() ++ ConsoleConfig.live
+  import ConsoleLayers._
 
   val effect: ZIO[Console with Logging with Config, Throwable, Unit] = for {
     _    <- log.info("Loading console.conf...")
@@ -20,6 +19,6 @@ object ConsoleApp extends App {
 
   def run(args: List[String]): URIO[ZEnv, ExitCode] = 
     effect
-      .provideCustomLayer(env)
+      .provideCustomLayer(loggingConfigHorizontalLayer)
       .fold(_ => ExitCode.failure, _ => ExitCode.success)
 }
