@@ -15,7 +15,7 @@ object ConsoleHorizontalLayerApp extends App {
   def run(args: List[String]): URIO[ZEnv, ExitCode] =
     effect
       .provideLayer(printerStoreHorizontalLayer)
-      .catchAll(error => ZIO.succeed( error.printStackTrace() ).map(_ => ExitCode.failure) )
+      .catchAll(error => ZIO.succeed(error.printStackTrace()).exitCode )
       .map { message =>
         println(s"[App] Printed and stored message: $message")
         ExitCode.success
