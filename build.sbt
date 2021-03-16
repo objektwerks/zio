@@ -18,4 +18,5 @@ libraryDependencies ++= {
   )
 }
 scalacOptions += "-Ymacro-annotations"
+parallelExecution := false
 testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
