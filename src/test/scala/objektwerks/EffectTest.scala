@@ -9,20 +9,16 @@ import scala.util.Try
 
 object EffectTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("effect.test")(
-    test("effect total") {
-      assert(runtime.unsafeRun( ZIO.effectTotal( List(1, 2, 3).sum )))(equalTo(6))
-    },
-
-    test("from future") {
-      assert(runtime.unsafeRun( ZIO.fromFuture { implicit ec => Future(3).map(_ * 3) } ))(equalTo(9))
-    },
-
     test("fail") {
       assert(runtime.unsafeRun( ZIO.fail("fail").mapError(error => new Exception(error)).either ).isLeft)(isTrue)
     },
 
     test("succeed") {
       assert(runtime.unsafeRun( ZIO.succeed(9) ))(equalTo(9))
+    },
+
+    test("from function") {
+      assert(runtime.unsafeRun( ZIO.fromFunction((i: Int) => i * i).provide(3) ))(equalTo(9))
     },
 
     test("from option") {
@@ -37,8 +33,12 @@ object EffectTest extends ZioTest {
       assert(runtime.unsafeRun( ZIO.fromTry(Try(18 / 3)) ))(equalTo(6))
     },
 
-    test("from function") {
-      assert(runtime.unsafeRun( ZIO.fromFunction((i: Int) => i * i).provide(3) ))(equalTo(9))
+    test("effect total") {
+      assert(runtime.unsafeRun( ZIO.effectTotal( List(1, 2, 3).sum )))(equalTo(6))
+    },
+
+    test("from future") {
+      assert(runtime.unsafeRun( ZIO.fromFuture { implicit ec => Future(3).map(_ * 3) } ))(equalTo(9))
     }
   )
 }
