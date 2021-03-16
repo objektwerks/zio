@@ -1,8 +1,8 @@
 package objektwerks
 
 import zio.stream._
-import zio.test._
 import zio.test.Assertion._
+import zio.test._
 
 object StreamTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("stream.test")(
