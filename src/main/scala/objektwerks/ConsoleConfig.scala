@@ -1,11 +1,10 @@
 package objektwerks
 
 import com.typesafe.config.ConfigFactory
-
-import zio.{Has, Task, ZLayer, ZIO}
 import zio.config._
 import zio.config.magnolia.DeriveConfigDescriptor.descriptor
 import zio.config.typesafe.TypesafeConfigSource
+import zio.{Has, Task, ZIO, ZLayer}
 
 case class ConsoleConfig(question: String, response: String)
 

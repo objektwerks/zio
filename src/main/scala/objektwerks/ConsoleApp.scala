@@ -1,8 +1,8 @@
 package objektwerks
 
-import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 import zio.console._
 import zio.logging._
+import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 
 object ConsoleApp extends App {
   import ConsoleConfig._

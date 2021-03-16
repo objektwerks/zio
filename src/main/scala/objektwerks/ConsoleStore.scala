@@ -1,7 +1,7 @@
 package objektwerks
 
-import zio.{Has, Task, ZLayer}
 import zio.macros.accessible
+import zio.{Has, Task, ZLayer}
 
 @accessible
 object ConsoleStore {

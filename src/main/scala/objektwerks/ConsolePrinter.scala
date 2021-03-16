@@ -1,6 +1,6 @@
 package objektwerks
 
-import zio.{ZIO, Has, Task, ZLayer}
+import zio.{Has, Task, ZIO, ZLayer}
 
 object ConsolePrinter {
   type Printer = Has[ConsolePrinter.Service]

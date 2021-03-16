@@ -8,8 +8,8 @@ import zio.logging._
 
 object ConsoleLayers {
   import ConsolePrinter._
-  import ConsoleStore._
   import ConsolePrinterStore._
+  import ConsoleStore._
 
   /* 
     ++ alias and

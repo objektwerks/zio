@@ -3,9 +3,9 @@ package objektwerks
 import zio.{App, ExitCode, URIO, ZEnv, ZIO}
 
 object ConsoleHorizontalLayerApp extends App {
+  import ConsoleLayers._
   import ConsolePrinter._
   import ConsoleStore._
-  import ConsoleLayers._
 
   val effect: ZIO[Printer with Store, Throwable, Message] = for {
     printedMessage <- print( Message("Horizontal layer app message!") )
