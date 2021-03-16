@@ -2,7 +2,7 @@ package objektwerks
 
 import zio.ZLayer
 
-object ConsolePrinterStoreLayers {
+object ConsoleLayers {
   import ConsolePrinter._
   import ConsoleStore._
   import ConsolePrinterStore._

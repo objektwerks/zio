@@ -4,7 +4,7 @@ import zio.{App, ExitCode, ZEnv, ZIO}
 
 object ConsoleVerticalLayerApp extends App {
   import ConsolePrinterStore._
-  import ConsolePrinterStoreLayers._
+  import ConsoleLayers._
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, ExitCode] =
     printAndStore( Message("Vertical layer app message!") )
