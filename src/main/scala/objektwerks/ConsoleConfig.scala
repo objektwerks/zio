@@ -10,8 +10,6 @@ import zio.config.typesafe.TypesafeConfigSource
 case class ConsoleConfig(question: String, response: String)
 
 object ConsoleConfig {
-  val empty = ConsoleConfig("", "")
-
   type Config = Has[ConsoleConfig.Service]
 
   trait Service {
@@ -25,7 +23,7 @@ object ConsoleConfig {
           source <- TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) )
           conf   <- read(descriptor[ConsoleConfig] from source)
         } yield conf
-        conf.getOrElse(empty)
+        conf.getOrElse( ConsoleConfig("", "") )
       }
     }
   }
