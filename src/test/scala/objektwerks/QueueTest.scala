@@ -6,13 +6,12 @@ import zio.test._
 
 object QueueTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("queue.test")(
-    test("queue") {
-      val queueInt = for {
+    testM("queue") {
+      for {
         queue  <- Queue.bounded[Int](3)
         _      <- queue.offer(3)
         result <- queue.take
-      } yield result
-      assert(runtime.unsafeRun( queueInt ))(equalTo(3))
+      } yield assert( result )( equalTo(3) )
     }
   )
 }
