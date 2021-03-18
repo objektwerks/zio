@@ -8,17 +8,17 @@ object FiberTest extends ZioTest {
   import Files._
 
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("fiber.test")(
-    test("fiber > hello world") {
-      val helloWorld: ZIO[Any, Nothing, String] = for {
+    testM("fiber > hello world") {
+      for {
         helloFiber <- ZIO.succeed("Hello, ").fork
         worldFiber <- ZIO.succeed("world!").fork
         fiber = helloFiber zip worldFiber
         tuple <- fiber.join
       } yield {
         val (hello, world) = tuple
-        hello + world
+        val helloWorld = hello + world
+        assert( helloWorld )( equalTo("Hello, world!") )
       }
-      assert(runtime.unsafeRun( helloWorld ))(equalTo("Hello, world!"))
     },
 
     test("fiber > file") {
@@ -26,7 +26,7 @@ object FiberTest extends ZioTest {
         fiber <- file("build.sbt").fork
         source <- fiber.join
       } yield source.mkString
-      assert(runtime.unsafeRun(fileContent).nonEmpty)(isTrue)
+      assert( runtime.unsafeRun(fileContent).nonEmpty )( isTrue )
     }
   )
 }
