@@ -6,14 +6,13 @@ import zio.test._
 
 object RefTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("ref.test")(
-    test("ref") {
-      val refInt = for {
+    testM("ref") {
+      for {
         ref     <- Ref.make(3)
         initial <- ref.get
         _       <- ref.set(initial * 3)
         result  <- ref.get
-      } yield result
-      assert(runtime.unsafeRun( refInt ))(equalTo(9))
+      } yield assert( result )( equalTo(9) )
     }
   )
 }
