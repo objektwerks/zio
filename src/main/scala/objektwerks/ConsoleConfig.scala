@@ -16,14 +16,12 @@ object ConsoleConfig {
   }
 
   val live: ZLayer[Any, Nothing, Config] = ZLayer.succeed {
-    new Service {
-      override def load(path: String): Task[ConsoleConfig] = Task {
-        val conf = for {
-          source <- TypesafeConfigSource.fromTypesafeConfig( ConfigFactory.load(path) )
-          conf   <- read(descriptor[ConsoleConfig] from source)
-        } yield conf
-        conf.getOrElse( ConsoleConfig("", "") )
-      }
+    (path: String) => Task {
+      val conf = for {
+        source <- TypesafeConfigSource.fromTypesafeConfig(ConfigFactory.load(path))
+        conf <- read(descriptor[ConsoleConfig] from source)
+      } yield conf
+      conf.getOrElse(ConsoleConfig("", ""))
     }
   }
 
