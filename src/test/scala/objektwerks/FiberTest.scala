@@ -22,11 +22,11 @@ object FiberTest extends ZioTest {
     },
 
     test("fiber > file") {
-      val fileContent: ZIO[Any, Throwable, String] = for {
+      val content: ZIO[Any, Throwable, String] = for {
         fiber <- file("build.sbt").fork
         source <- fiber.join
       } yield source.mkString
-      assert( runtime.unsafeRun(fileContent).nonEmpty )( isTrue )
+      assert( runtime.unsafeRun( content ).nonEmpty )( isTrue )
     }
   )
 }
