@@ -14,12 +14,12 @@ object ErrorTest extends ZioTest {
     },
 
     test("fold") {
-      val fold: Task[String] = file("build.sat").foldM(_ => file("build.sbt"), source => ZIO.succeed(source))
+      val fold: Task[String] = file("build.sat").foldM(_ => file("build.sbt"), source => ZIO.succeed(source) )
       assert( runtime.unsafeRun( fold ).nonEmpty )( isTrue )
     },
 
     test("catch all") {
-      val catchall: Task[String] = file("build.sat").catchAll(_ => file("build.sbt"))
+      val catchall: Task[String] = file("build.sat").catchAll( _ => file("build.sbt") )
       assert( runtime.unsafeRun( catchall ).mkString.nonEmpty )( isTrue )
     }
   )
