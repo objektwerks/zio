@@ -21,6 +21,6 @@ Run
 ---
 1. sbt run
 >Multiple main classes detected. Select one to run:
-  1. objektwerks.ConsoleApp
-  2. objektwerks.ConsoleHorizontalLayerApp
-  3. objektwerks.ConsoleVerticalLayerApp
+1. objektwerks.ConsoleApp
+2. objektwerks.ConsoleHorizontalLayerApp
+3. objektwerks.ConsoleVerticalLayerApp
