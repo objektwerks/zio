@@ -1,7 +1,7 @@
 package objektwerks
 
 import zio.json._
-import zio.test.Assertion.equalTo
+import zio.test.Assertion.{equalTo, isTrue}
 import zio.test.{Spec, TestFailure, TestSuccess, assert}
 
 sealed trait Entity extends Product with Serializable
@@ -18,8 +18,9 @@ object JsonTest extends ZioTest {
     test("json") {
       val person = Person("Fred Flintstone", 39)
       val json = person.toJson
-      val clone = json.fromJson.getOrElse( Person("", -1))
-      assert( clone )( equalTo( person ) )
+      val other = json.fromJson.getOrElse( Person("", -1) )
+      assert( other )( equalTo( person ) ) &&
+      assert( other.isInstanceOf[Entity])( isTrue )
     }
   )
 }
