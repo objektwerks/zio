@@ -1,6 +1,12 @@
 ZIO
 ---
->ZIO and ZIO ecosystem feature tests.
+>ZIO feature tests, to include the zio ecosystem:
+* zio-macros
+* zio-config
+* zio-streams
+* zio-logging
+* zio-json
+* zio-test
 
 Macros
 ------
