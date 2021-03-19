@@ -11,7 +11,7 @@ object FiberRefTest extends ZioTest {
         fiberRef <- FiberRef.make[Int](0)
         _        <- fiberRef.set(3)
         value    <- fiberRef.get
-      } yield assert(value)( equalTo(3) )
+      } yield assert( value )( equalTo(3) )
     }
   )
 }
