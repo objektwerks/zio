@@ -1,6 +1,6 @@
 ZIO
 ---
->ZIO feature tests.
+>ZIO and ZIO ecosystem feature tests.
 
 Macros
 ------
