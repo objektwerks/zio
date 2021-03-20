@@ -1,5 +1,6 @@
-package objektwerks
+package objektwerks.console
 
+import objektwerks.Message
 import zio.{Has, Task, ZIO, ZLayer}
 
 object ConsolePrinter {
@@ -8,12 +9,13 @@ object ConsolePrinter {
   trait Service {
     def print(message: Message): Task[Message]
   }
-  
+
   val live: ZLayer[Any, Nothing, Printer] = ZLayer.succeed {
-    (message: Message) => Task {
-      println(s"[Printer] printed: $message")
-      message
-    }
+    (message: Message) =>
+      Task {
+        println(s"[Printer] printed: $message")
+        message
+      }
   }
 
   def print(message: Message): ZIO[Printer, Throwable, Message] = ZIO.accessM(_.get.print(message))

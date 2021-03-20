@@ -1,4 +1,4 @@
-package objektwerks
+package objektwerks.console
 
 import com.typesafe.config.ConfigFactory
 import zio.config._

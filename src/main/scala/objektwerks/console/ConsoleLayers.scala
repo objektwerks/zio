@@ -1,17 +1,17 @@
-package objektwerks
+package objektwerks.console
 
-import objektwerks.ConsoleConfig.Config
 import zio.ZLayer
 import zio.clock.Clock
 import zio.console.Console
-import zio.logging._
+import zio.logging.Logging
 
 object ConsoleLayers {
+  import ConsoleConfig._
   import ConsolePrinter._
   import ConsolePrinterStore._
   import ConsoleStore._
 
-  /* 
+  /*
     ++ alias and
     >>> alias to
   */

@@ -1,5 +1,6 @@
-package objektwerks
+package objektwerks.console
 
+import objektwerks.Message
 import zio.{Has, Task, ZIO, ZLayer}
 
 object ConsolePrinterStore {
@@ -12,13 +13,13 @@ object ConsolePrinterStore {
     def printAndStore(message: Message): Task[Message] = {
       for {
         printedMessage <- printer.print(message)
-        storedMessage  <- store.store(printedMessage)
+        storedMessage <- store.store(printedMessage)
       } yield storedMessage
     }
   }
 
   val live: ZLayer[Printer with Store, Nothing, PrinterStore] =
-    ZLayer.fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrinterStore.Service]( 
+    ZLayer.fromServices[ConsolePrinter.Service, ConsoleStore.Service, ConsolePrinterStore.Service](
       (printer, store) => new Service(printer, store)
     )
 
