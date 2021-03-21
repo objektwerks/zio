@@ -14,6 +14,7 @@ libraryDependencies ++= {
     "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
     "dev.zio" %% "zio-logging" % "0.5.7",
     "dev.zio" %% "zio-json" % "0.1.2",
+    "dev.zio" %% "zio-actors" % "0.0.9",
     "dev.zio" %% "zio-zmx" % "0.0.5",
     "dev.zio" %% "zio-test" % zioVersion % Test,
     "dev.zio" %% "zio-test-sbt" % zioVersion % Test
