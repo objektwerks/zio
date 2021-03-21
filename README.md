@@ -6,8 +6,6 @@ ZIO
 * zio-streams
 * zio-logging
 * zio-json
-* zio-zmx [todo]
-* zio-actors [todo]
 * zio-test
 
 Macros
