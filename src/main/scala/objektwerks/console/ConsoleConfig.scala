@@ -17,11 +17,10 @@ object ConsoleConfig {
 
   val live: ZLayer[Any, Nothing, Config] = ZLayer.succeed {
     (path: String) => Task {
-      val conf = for {
+      (for {
         source <- TypesafeConfigSource.fromTypesafeConfig(ConfigFactory.load(path))
         conf <- read(descriptor[ConsoleConfig] from source)
-      } yield conf
-      conf.getOrElse(ConsoleConfig("", ""))
+      } yield conf).getOrElse(ConsoleConfig("", ""))
     }
   }
 
