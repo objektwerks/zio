@@ -6,12 +6,13 @@ ZIO
 * zio-streams
 * zio-logging
 * zio-json
+* zio-http
 * zio-test
 
 Macros
 ------
 >The zio-macros library contains the @accessible annotation, allowing for the
->auto-generation of ZIO accessors. See ConsoleStore for an example.
+>auto-generation of ZIO accessors. See console/ConsoleStore for an example.
 
 Test
 ----
@@ -23,4 +24,5 @@ Run
 >Multiple main classes detected. Select one to run:
 1. objektwerks.console.ConsoleApp
 2. objektwerks.console.ConsoleHorizontalLayerApp
-3. objektwerks.console.ConsoleVerticalLayerApp
+3. objektwerks.console.ConsoleVerticalLayerApp 
+4. objektwerks.http.NowApp ( curl http://localhost:7979/now )
