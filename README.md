@@ -6,7 +6,7 @@ ZIO
 * zio-streams
 * zio-logging
 * zio-json
-* zio-http ( **This library is not ready yet.** )
+* zio-http
 * zio-test
 
 Macros
