@@ -6,7 +6,7 @@ import zio._
 import zhttp.http._
 import zhttp.service.Server
 
-object NowApp extends App {
+object NowServer extends App {
   val router = Http.collect[Request] {
     case Method.GET -> Root / "now" => Response.text( Instant.now.toString )
   }
