@@ -2,12 +2,12 @@ package objektwerks.http
 
 import java.time.Instant
 
-import zio._
 import zhttp.http._
 import zhttp.service.Server
+import zio._
 
 object NowServer extends App {
-  val router = Http.collect[Request] {
+  val router: Http[Any, HttpError, Request, Response] = Http.collect[Request] {
     case Method.GET -> Root / "now" => Response.text( Instant.now.toString )
   }
 
