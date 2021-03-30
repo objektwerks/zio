@@ -6,8 +6,9 @@ import zhttp.service._
 import zio._
 
 object NowClient extends App {
-  val env: ZLayer[Any, Nothing, ChannelFactory with EventLoopGroup] = ChannelFactory.nio ++ EventLoopGroup.auto()
-  val url: URL = URL( Root / "now" )
+  val env: ZLayer[Any, Nothing, ChannelFactory with EventLoopGroup] = ChannelFactory.nio ++ EventLoopGroup.nio(0)
+  val url: URL = URL( Root / "http://localhost:7979" / "now" )
+  println(s"URL: ${url.toString}")
   val endpoint: Endpoint = ( Method.GET, url )
 
   val effect = for {
