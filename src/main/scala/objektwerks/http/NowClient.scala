@@ -11,8 +11,10 @@ object NowClient extends App {
   val path = Root / "now"
   val location = Location.Absolute(Scheme.HTTP, "localhost", 7979)
   val url: URL = URL( path, location )
+  val alternateUrl = URL.fromString("http://localhost:7979/now").get
   println(s"URL: ${url.toString}")
-  val endpoint: Endpoint = ( Method.GET, url )
+  println(s"Alternate URL: ${alternateUrl.toString}")
+  val endpoint: Endpoint = ( Method.GET, alternateUrl )
 
   val effect = for {
     response <- Client.request( Request( endpoint ) )
