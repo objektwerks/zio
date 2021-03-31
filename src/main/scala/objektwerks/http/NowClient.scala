@@ -8,9 +8,9 @@ import zio._
 
 object NowClient extends App {
   val env: ZLayer[Any, Nothing, ChannelFactory with EventLoopGroup] = ChannelFactory.nio ++ EventLoopGroup.nio(0)
-  val path = Root / "now"
-  val location = Location.Absolute(Scheme.HTTP, "localhost", 7979)
-  val url: URL = URL( path, location )
+  val path: Path = Root / "now"
+  val location: Location = Location.Absolute(Scheme.HTTP, "localhost", 7979)
+  val url = URL( path, location )
   val alternateUrl: URL = URL.fromString("http://localhost:7979/now").get
   println(s"URL: ${url.toString}")
   println(s"Alternate URL: ${alternateUrl.toString}")
