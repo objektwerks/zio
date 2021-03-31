@@ -6,6 +6,9 @@ import zhttp.http._
 import zhttp.service._
 import zio._
 
+/**
+ * Will wait for new zio-http release!
+ */
 object NowClient extends App {
   val env: ZLayer[Any, Nothing, ChannelFactory with EventLoopGroup] = ChannelFactory.nio ++ EventLoopGroup.nio(0)
   val path: Path = Root / "now"
@@ -14,6 +17,11 @@ object NowClient extends App {
   val alternateUrl: URL = URL.fromString("http://localhost:7979/now").get
   println(s"URL: ${url.toString}")
   println(s"Alternate URL: ${alternateUrl.toString}")
+  /*
+    URL: URL(/now,Absolute(HTTP,localhost,7979))
+    Alternate URL: URL(/now,Absolute(HTTP,localhost,7979))
+    The requested URI "/http:/localhost:7979/now" was not found on this server
+   */
   val endpoint: Endpoint = ( Method.GET, alternateUrl )
 
   val effect = for {
