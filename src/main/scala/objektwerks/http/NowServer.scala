@@ -7,10 +7,10 @@ import zhttp.service.Server
 import zio._
 
 object NowServer extends App {
-  val router: Http[Any, HttpError, Request, Response] = Http.collect[Request] {
+  val router = Http.collect {
     case Method.GET -> Root / "now" => Response.text( Instant.now.toString )
   }
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
+  override def run(args: List[String]): URIO[ZEnv, ExitCode] =
     Server.start(7979, router).exitCode
 }
