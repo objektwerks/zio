@@ -1,19 +1,14 @@
 package objektwerks.http
 
-import zhttp.http.URL.Location
 import zhttp.http._
 import zhttp.service._
 import zio._
 
 object NowClient extends App {
   val env: ZLayer[Any, Nothing, ChannelFactory with EventLoopGroup] = ChannelFactory.auto ++ EventLoopGroup.auto()
-  val path: Path = Root / "now"
-  val location: Location = Location.Absolute(Scheme.HTTP, "localhost", 7979)
-  val url = URL( path, location )
-  val endpoint: Endpoint = ( Method.GET, url )
 
   val effect = for {
-    response <- Client.request( Request( endpoint ) )
+    response <- Client.request("http://localhost:7979/now")
     _        <- console.putStrLn {
                   response.content match {
                     case HttpContent.Complete(data) => data
