@@ -34,5 +34,6 @@ object NowClient extends App {
                 }
   } yield ()
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = effect.provideCustomLayer(env).exitCode
+  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
+    effect.provideCustomLayer(env).exitCode
 }

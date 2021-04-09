@@ -11,5 +11,6 @@ object NowServer extends App {
     case Method.GET -> Root / "now" => Response.text( Instant.now.toString )
   }
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = Server.start(7979, router).exitCode
+  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
+    Server.start(7979, router).exitCode
 }
