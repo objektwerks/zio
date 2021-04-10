@@ -1,6 +1,6 @@
 package objektwerks.http
 
-import zhttp.http._
+import zhttp.http.HttpContent.Complete
 import zhttp.service._
 import zio._
 
@@ -11,8 +11,8 @@ object NowClient extends App {
     response <- Client.request("http://localhost:7979/now")
     _        <- console.putStrLn {
                   response.content match {
-                    case HttpContent.Complete(data) => data
-                    case _     => "No response received!"
+                    case Complete(data) => data
+                    case _              => "No response received!"
                   }
                 }
   } yield ()
