@@ -25,5 +25,5 @@ Run
 1. objektwerks.console.ConsoleApp
 2. objektwerks.console.ConsoleHorizontalLayerApp
 3. objektwerks.console.ConsoleVerticalLayerApp
-4. objektwerks.http.NowClient ( does not currently work )
+4. objektwerks.http.NowClient
 5. objektwerks.http.NowServer ( curl http://localhost:7979/now )
