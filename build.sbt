@@ -13,7 +13,7 @@ libraryDependencies ++= {
     "dev.zio" %% "zio-config-magnolia" % zioConfigVersion,
     "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
     "dev.zio" %% "zio-logging" % "0.5.8",
-    "dev.zio" %% "zio-json" % "0.1.2",
+    "dev.zio" %% "zio-json" % "0.1.4",
     "io.d11" %% "zhttp" % "1.0.0.0-RC15",
     "dev.zio" %% "zio-test" % zioVersion % Test,
     "dev.zio" %% "zio-test-sbt" % zioVersion % Test
