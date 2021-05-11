@@ -1,6 +1,6 @@
 package objektwerks.http
 
-import zhttp.http.HttpContent.Complete
+import zhttp.http.HttpData
 import zhttp.service._
 import zio._
 
@@ -11,14 +11,12 @@ object NowClient extends App {
     response <- Client.request("http://localhost:7979/now")
     _        <- console.putStrLn {
                   response.content match {
-                    case Complete(data) => data
-                    case _              => "No response received!"
+                    case HttpData.CompleteData(data) => data.map(_.toChar).mkString
+                    case HttpData.StreamData(_)      => "Chunked data received!"
+                    case HttpData.Empty              => "No response received!"
                   }
                 }
   } yield ()
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] =
-    effect
-      .provideCustomLayer(env)
-      .exitCode
+  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = effect.provideCustomLayer(env).exitCode
 }
