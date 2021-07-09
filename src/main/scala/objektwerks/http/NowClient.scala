@@ -1,7 +1,8 @@
 package objektwerks.http
 
-import zhttp.http.HttpData
+import zhttp.http.HttpData._
 import zhttp.service._
+
 import zio._
 
 object NowClient extends App {
@@ -11,9 +12,9 @@ object NowClient extends App {
     response <- Client.request("http://localhost:7979/now")
     _        <- console.putStrLn {
                   response.content match {
-                    case HttpData.CompleteData(data) => data.map(_.toChar).mkString
-                    case HttpData.StreamData(_)      => "Chunked data received!"
-                    case HttpData.Empty              => "No response received!"
+                    case CompleteData(data) => data.map(_.toChar).mkString
+                    case StreamData(_)      => "Chunked data received!"
+                    case Empty              => "No response received!"
                   }
                 }
   } yield ()
