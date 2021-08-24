@@ -7,7 +7,7 @@ import zio.test._
 object StreamTest extends ZioTest {
   def spec: Spec[Environment, TestFailure[Nothing], TestSuccess] = suite("stream.test")(
     testM("fold left") {
-      assertM( Stream(1, 2, 3).run( Sink.foldLeft[Int, Int](0)(_ + _) ) )( equalTo(6) )
+      assertM( Stream(1, 2, 3).run( Sink.foldLeft(0)(_ + _) ) )( equalTo(6) )
     },
 
     testM("fold") {
