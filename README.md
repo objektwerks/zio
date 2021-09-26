@@ -27,3 +27,7 @@ Run
 3. objektwerks.console.ConsoleVerticalLayerApp
 4. objektwerks.http.NowClient
 5. objektwerks.http.NowServer ( curl http://localhost:7979/now )
+
+Resources
+---------
+1. ZIO - https://zio.dev
