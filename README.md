@@ -9,6 +9,10 @@ ZIO
 * zio-http
 * zio-test
 
+Note
+----
+>ZIO 1.+ is deprecated by ZIO 2.+. See zio2 project.
+
 Macros
 ------
 >The zio-macros library contains the @accessible annotation, allowing for the
