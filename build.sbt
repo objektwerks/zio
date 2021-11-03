@@ -1,7 +1,7 @@
 name := "zio"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.6"
+scalaVersion := "2.13.7"
 libraryDependencies ++= {
   val zioVersion = "1.0.12"
   val zioConfigVersion = "1.0.10"
