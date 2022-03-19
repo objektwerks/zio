@@ -9,7 +9,7 @@ object NowClient extends App {
 
   val effect = for {
     response <- Client.request("http://localhost:7979/now")
-    now      <- response.getBodyAsString
+    now      <- response.bodyAsString
     _        <- console.putStrLn(now)
   } yield ()
 
