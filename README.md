@@ -11,7 +11,7 @@ ZIO
 
 Note
 ----
->ZIO 1.+ is deprecated by ZIO 2.+. See [zio2 project]( https://github.com/objektwerks/zio2 ).
+>This project is closed.
 
 Macros
 ------
