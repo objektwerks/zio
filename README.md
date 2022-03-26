@@ -9,10 +9,6 @@ ZIO
 * zio-http
 * zio-test
 
-Note
-----
->This project is closed.
-
 Macros
 ------
 >The zio-macros library contains the @accessible annotation, allowing for the
