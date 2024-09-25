@@ -1,7 +1,7 @@
 name := "zio"
 organization := "objektwerks"
 version := "0.1-SNAPSHOT"
-scalaVersion := "2.13.14"
+scalaVersion := "2.13.15"
 libraryDependencies ++= {
   val zioVersion = "1.0.18"
   val zioConfigVersion = "1.0.10" // Don't upgrade!
